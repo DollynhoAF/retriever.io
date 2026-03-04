@@ -144,7 +144,7 @@ const SemanticColorTable = ({ group }: { group: SemanticColorGroup }) => {
 
 export default function ColorsPage() {
     return (
-        <Box px="2xl" py="xl">
+        <Box px={{ base: "md", md: "2xl" }} py={{ base: "lg", md: "xl" }}>
 
             {/* Header */}
             <Box mb="xl">

@@ -5,7 +5,7 @@ import { SectionCard, TableHead, TokenIcon, typographyScale } from "../_shared";
 
 export default function TypographyPage() {
     return (
-        <Box px="2xl" py="xl">
+        <Box px={{ base: "md", md: "2xl" }} py={{ base: "lg", md: "xl" }}>
             <Box mb="xl">
                 <Heading as="h1" fontSize="3xl" fontWeight="bold" color="text.heading"
                     fontFamily="var(--font-montserrat)" letterSpacing="0.24px" mb="xs">

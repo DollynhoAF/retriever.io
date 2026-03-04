@@ -122,7 +122,7 @@ const TIPO_LABEL: Record<Tipo, string> = {
 
 export default function ButtonsPage() {
     return (
-        <Box px="2xl" py="xl">
+        <Box px={{ base: "md", md: "2xl" }} py={{ base: "lg", md: "xl" }}>
 
             {/* Header */}
             <Box mb="xl">

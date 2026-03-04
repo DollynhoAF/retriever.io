@@ -72,7 +72,9 @@ export const SectionCard = ({ title, subtitle, children, cornerElement }: Sectio
                 {cornerElement && <Box flexShrink={0} ml="md">{cornerElement}</Box>}
             </Flex>
         </Box>
-        {children}
+        <Box overflowX="auto" w="100%">
+            {children}
+        </Box>
     </Box>
 );
 

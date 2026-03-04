@@ -9,6 +9,7 @@ import { SunIcon, MoonIcon, HamburgerIcon } from "./_shared";
 
 const TOPBAR_H = "56px";
 const SIDEBAR_W = 240;
+const MOBILE_BP = 768;
 
 const navGroups = [
     {
@@ -32,22 +33,48 @@ const navGroups = [
 ];
 
 export default function PlaygroundLayout({ children }: { children: React.ReactNode }) {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const [mounted, setMounted] = useState(false);
     const pathname = usePathname();
     const { theme, setTheme } = useTheme();
 
+    useEffect(() => {
+        const checkMobile = () => {
+            const mobile = window.innerWidth < MOBILE_BP;
+            setIsMobile(mobile);
+            setOpen(!mobile);
+        };
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
     useEffect(() => { setMounted(true); }, []);
+
+    // Fecha sidebar ao navegar no mobile
+    useEffect(() => {
+        if (isMobile) setOpen(false);
+    }, [pathname, isMobile]);
 
     const isDark = mounted && theme === "dark";
 
     return (
         <Box bg="bg.surface" color="text.heading" minH="100vh" fontFamily="var(--font-montserrat)">
 
+            {/* ─── Backdrop mobile ─── */}
+            {isMobile && open && (
+                <Box
+                    position="fixed" inset={0} zIndex={14}
+                    bg="rgba(0,0,0,0.45)"
+                    onClick={() => setOpen(false)}
+                />
+            )}
+
             {/* ─── Top bar ─── */}
             <Box
                 position="fixed" top="0" left="0" right="0" zIndex={20}
-                h={TOPBAR_H} px="lg"
+                h={TOPBAR_H} px="md"
                 borderBottomWidth="1px" borderColor="border.subtle"
                 bg="bg.surface"
                 display="flex" alignItems="center"
@@ -78,24 +105,32 @@ export default function PlaygroundLayout({ children }: { children: React.ReactNo
                     >
                         RETRIEVER
                     </Text>
-                    <Box w="2px" h="20px" bg="border.default" flexShrink={0} />
-                    <Flex align="center" gap="sm">
-                        <Text fontSize="sm" fontWeight="medium" color="text.heading">Design System</Text>
-                        <Box borderWidth="1px" borderColor="border.default" px="sm" py="2px" rounded="sm">
-                            <Text fontSize="xs" color="text.heading" fontFamily="mono">v2.6</Text>
-                        </Box>
-                    </Flex>
+
+                    {/* Oculto no mobile */}
+                    {!isMobile && (
+                        <>
+                            <Box w="2px" h="20px" bg="border.default" flexShrink={0} />
+                            <Flex align="center" gap="sm">
+                                <Text fontSize="sm" fontWeight="medium" color="text.heading">Design System</Text>
+                                <Box borderWidth="1px" borderColor="border.default" px="sm" py="2px" rounded="sm">
+                                    <Text fontSize="xs" color="text.heading" fontFamily="mono">v2.6</Text>
+                                </Box>
+                            </Flex>
+                        </>
+                    )}
 
                     <Box flex={1} />
 
-                    {/* Theme toggle */}
+                    {/* Theme toggle — só ícone no mobile */}
                     <Button
                         size="sm" variant="outline"
-                        borderColor="border.default" color="text.heading" gap="xs"
+                        borderColor="border.default" color="text.heading"
+                        gap={isMobile ? "0" : "xs"}
+                        px={isMobile ? "8px" : undefined}
                         onClick={() => setTheme(isDark ? "light" : "dark")}
                     >
                         {isDark ? <SunIcon /> : <MoonIcon />}
-                        {isDark ? "Light Mode" : "Dark Mode"}
+                        {!isMobile && (isDark ? "Light Mode" : "Dark Mode")}
                     </Button>
                 </Flex>
             </Box>
@@ -156,7 +191,7 @@ export default function PlaygroundLayout({ children }: { children: React.ReactNo
             {/* ─── Main content ─── */}
             <Box
                 pt={TOPBAR_H}
-                ml={open ? `${SIDEBAR_W}px` : "0"}
+                ml={!isMobile && open ? `${SIDEBAR_W}px` : "0"}
                 transition="margin-left 0.25s ease"
                 minH="100vh"
             >
