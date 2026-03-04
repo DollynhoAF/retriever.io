@@ -8,20 +8,25 @@
  */
 
 import { ChakraProvider } from "@chakra-ui/react";
-import { ThemeProvider, type ThemeProviderProps } from "next-themes";
+import { ThemeProvider } from "next-themes";
 import { system } from "../theme";
+
+type ColorModeProviderProps = {
+  children: React.ReactNode;
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // COLOR MODE PROVIDER (next-themes + Chakra)
 // ─────────────────────────────────────────────────────────────────────────────
 
-export function ColorModeProvider(props: ThemeProviderProps) {
+export function ColorModeProvider({ children }: ColorModeProviderProps) {
   return (
     <ThemeProvider
       attribute="class"
       disableTransitionOnChange
-      {...props}
-    />
+    >
+      {children}
+    </ThemeProvider>
   );
 }
 
