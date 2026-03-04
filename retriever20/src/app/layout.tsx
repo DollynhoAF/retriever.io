@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
+import { Montserrat } from "next/font/google";
 import { Providers } from "./providers";
+
+const montserrat = Montserrat({
+    subsets: ["latin"],
+    weight: ["400", "500", "700"],
+    variable: "--font-montserrat",
+    display: "swap",
+});
 
 export const metadata: Metadata = {
     title: "RETRIEVER Playground",
@@ -11,13 +19,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning>
-            <head>
-                <style dangerouslySetInnerHTML={{ __html: `:root { --font-montserrat: 'Montserrat', sans-serif; }` }} />
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-                <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" />
-            </head>
+        <html lang="en" suppressHydrationWarning className={montserrat.variable}>
             <body>
                 <Providers>{children}</Providers>
             </body>
